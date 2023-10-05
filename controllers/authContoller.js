@@ -1,18 +1,38 @@
-const User = require('./../models/userModel');
+
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
+const bcrypt = require('bcryptjs');
+
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient()
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN});
 }
 
-exports.signup = catchAsync(async(req, res, next) => {
-    const newUser = await User.create(req.body);
 
-    const token = signToken(newUser._id);
+
+exports.signup = catchAsync(async(req, res, next) => {
+    let { email, name, password } = req.body;
+    password = await bcrypt.hash(password, 12);
+
+    console.log({ email, name, password });
+    const newUser = await prisma.user.create({
+        data: {
+            create: {
+                email: email,
+                name: name,
+                password: password
+            }
+        }
+    });
+
+    console.log(newUser)
+
+    const token = signToken(newUser.id);
 
     res.status(201).json({
         status: 'success',
@@ -21,7 +41,7 @@ exports.signup = catchAsync(async(req, res, next) => {
     });
 });
 
-
+/*
 exports.login = catchAsync( async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -63,12 +83,6 @@ exports.protect = catchAsync(async (req, res, next) => {
         return next(new AppError('The user belonging to this token does no longer exit.', 401));
     }
 
-    /*if(freshUser.changedPasswordAfter(decoded.iat)){
-        return next(
-            new AppError('User recently changed password! Please log in again.', 401)
-        );
-    }*/
-
     req.user = freshUser;
     next();
 });
@@ -84,4 +98,4 @@ exports.restrictTo = (...roles) => {
 
         next();
     }
-}
+}*/

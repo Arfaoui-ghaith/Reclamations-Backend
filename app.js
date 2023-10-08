@@ -1,11 +1,18 @@
 const express = require('express');
 const app = express();
-
+const cors = require('cors');
 const userRouter = require('./routes/userRoutes');
 const reclamationRouter = require('./routes/reclamationRoutes');
 
 const globalErrorHandler = require('./controllers/errorController.js');
 const AppError = require('./utils/appError');
+
+
+app.use(cors({
+    origin: '*',
+    preflightContinue:false,
+    credentials: true
+}));
 
 app.use(express.json());
 

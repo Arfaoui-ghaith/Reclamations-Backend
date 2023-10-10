@@ -9,4 +9,8 @@ router.route('/')
     .get(reclamationController.getReclamations,reclamationController.filterReclamations)
     .post(reclamationController.addReclaamtion)
 
+router.route('/:id')
+    .put(reclamationController.updateReclamation)
+    .delete(reclamationController.deleteReclamation)
+
 module.exports = router;

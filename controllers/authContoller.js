@@ -49,6 +49,10 @@ exports.login = catchAsync( async (req, res, next) => {
         }
     });
 
+    if(!user){
+        return next(new AppError('Email not exists', 400));
+    }
+
     const correct = await bcrypt.compare(password, user.password);
 
     if(!correct || !user){

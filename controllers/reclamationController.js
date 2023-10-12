@@ -39,9 +39,7 @@ exports.addReclaamtion = catchAsync(async(req, res, next) => {
             content: cryptedData.content,
             subject: cryptedData.subject,
             ivData: cryptedData.ivData,
-            ivKey: cryptedData.ivKey,
-            encryptedDataKey: cryptedData.encryptedDataKey,
-            wrappingKey: cryptedData.wrappingKey
+            salt: cryptedData.salt
         }
     });
 
@@ -61,7 +59,8 @@ exports.getReclamations = catchAsync(async(req, res, next) => {
         const decryptedData = decrypt({
             subject: el.subject,
             content: el.content,
-            ivData: el.ivData
+            ivData: el.ivData,
+            salt: el.salt
         });
         return {...el, content: decryptedData.content, subject: decryptedData.subject}
     });
@@ -71,7 +70,7 @@ exports.getReclamations = catchAsync(async(req, res, next) => {
 });
 
 exports.filterReclamations = catchAsync(async(req, res, next) => {
-    if(req.user.role == "USER"){
+    if(req.user.role === "USER"){
         req.reclamations = req.reclamations.filter(el => el.sendBy.id === req.user.id)
     }
 

@@ -30,6 +30,7 @@ model Reclamation {
   content    String
   subject    String
   ivData     String
+  salt       String?
   createdAt  DateTime  @default(now())
 }
 

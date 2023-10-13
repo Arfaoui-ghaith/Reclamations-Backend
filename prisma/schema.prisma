@@ -29,7 +29,7 @@ model Reclamation {
   sendToId   String?   @db.ObjectId
   content    String
   subject    String
-  ivData     String
+  ivData     String?
   createdAt  DateTime  @default(now())
 }
 

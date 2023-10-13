@@ -3,7 +3,7 @@ const router = express.Router();
 const authController = require('./../controllers/authContoller');
 const reclamationController = require('./../controllers/reclamationController');
 
-router.use(authController.protect)
+//router.use(authController.protect)
 
 router.route('/')
     .get(reclamationController.getReclamations,reclamationController.filterReclamations)

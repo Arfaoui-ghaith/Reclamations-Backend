@@ -24,11 +24,12 @@ exports.addReclaamtion = catchAsync(async(req, res, next) => {
 
     const cryptedData = encrypt(subject,content);
 
+    console.log(req.user)
     const reclamation = await prisma.reclamation.create({
         data: {
             sendBy: {
                 connect: {
-                    id: req.user.data.id
+                    id: req.user.id
                 }
             },
             sendTo: {
@@ -70,8 +71,8 @@ exports.getReclamations = catchAsync(async(req, res, next) => {
 });
 
 exports.filterReclamations = catchAsync(async(req, res, next) => {
-    if(req.user.data.role === "USER"){
-        req.reclamations = req.reclamations.filter(el => el.sendBy.id === req.user.data.id)
+    if(req.user.role === "USER"){
+        req.reclamations = req.reclamations.filter(el => el.sendBy.id === req.user.id)
     }
 
     res.status(200).json({

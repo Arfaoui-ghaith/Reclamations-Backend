@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 exports.getUsers = catchAsync(async (req,res,next) => {
     const users = await prisma.user.findMany({
         where: {
-            role: "USER", NOT: { id: req.user.id }
+            role: "USER"
         }
     });
 
@@ -14,6 +14,6 @@ exports.getUsers = catchAsync(async (req,res,next) => {
 
     res.status(200).json({
         status: 'success',
-        users
+        users: users.filter(el => el.id != req.user.id)
     })
 })

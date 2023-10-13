@@ -80,7 +80,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     console.log(decoded)
 
     const freshUser = await prisma.user.findUnique({
-        where: { id: decoded.id }
+        where: { id: decoded.data.id }
     });
     if(!freshUser){
         return next(new AppError('The user belonging to this token does no longer exit.', 401));

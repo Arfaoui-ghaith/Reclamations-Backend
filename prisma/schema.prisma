@@ -27,9 +27,9 @@ model Reclamation {
   sendById   String?   @db.ObjectId
   sendTo     User?     @relation("ReceivedReclamations", fields: [sendToId], references: [id])
   sendToId   String?   @db.ObjectId
-  text       String
-  title      String
-  salt       String?
+  content    String
+  subject    String
+  ivData     String
   createdAt  DateTime  @default(now())
 }
 

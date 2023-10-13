@@ -8,8 +8,8 @@ const bcrypt = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-const signToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET,
+const signToken = (data) => {
+    return jwt.sign({ data }, process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN});
 }
 
@@ -26,11 +26,8 @@ exports.signup = catchAsync(async(req, res, next) => {
         }
     });
 
-    const token = signToken(newUser.id);
-
     res.status(201).json({
         status: 'success',
-        token,
         user: newUser
     });
 });
@@ -59,7 +56,7 @@ exports.login = catchAsync( async (req, res, next) => {
         return next(new AppError('Incorrect email or password', 401));
     }
 
-    const token = signToken(user.id);
+    const token = signToken({id: user.id, role : user.role});
     res.status(200).json({
         status: 'success',
         token

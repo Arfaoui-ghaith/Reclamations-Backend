@@ -28,7 +28,7 @@ exports.addReclaamtion = catchAsync(async(req, res, next) => {
         data: {
             sendBy: {
                 connect: {
-                    id: req.user.id
+                    id: req.user.data.id
                 }
             },
             sendTo: {
@@ -70,8 +70,8 @@ exports.getReclamations = catchAsync(async(req, res, next) => {
 });
 
 exports.filterReclamations = catchAsync(async(req, res, next) => {
-    if(req.user.role === "USER"){
-        req.reclamations = req.reclamations.filter(el => el.sendBy.id === req.user.id)
+    if(req.user.data.role === "USER"){
+        req.reclamations = req.reclamations.filter(el => el.sendBy.id === req.user.data.id)
     }
 
     res.status(200).json({
